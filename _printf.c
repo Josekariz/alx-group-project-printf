@@ -21,16 +21,13 @@ int _printf(const char *format, ...)
 			switch (format[i])
 			{
 				case 'c':
-					/* code to print a character */
+					count += putchar(va_arg(args, int));
 					break;
 				case 's':
 					count += print_str(va_arg(args, char *));
 					break;
 				case '%':
-					/* code to print a percent sign */
-					break;
-				default:
-					/* code to handle invalid conversion specifiers */
+					count += putchar('%');
 					break;
 			}
 		}
