@@ -2,51 +2,76 @@
 
 /**
  * _printf - produces output according to a format
- * @format: format string containing the characters and the specifiers
+ * @format: format string containing directives
  *
- * Description: This function will call the get_print() function that will
- * determine which printing function to call depending on the conversion
- * specifiers contained into fmt.
- *
- * Return: Length of the formatted output string.
+ * Return: number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	va_list arguments;
-	int (*pfunc)(va_list, flags_t *);
-	const char *p;
-	flags_t flags = {0, 0, 0};
-	int count = 0;
+	va_list args;
+	int i, count = 0;
 
-	va_start(arguments, format);
+	va_start(args, format);
 
-	if (!format || (format[0] == '%' && !format[1]))
-		return (-1);
-	if (format[0] == '%' && format[1] == ' ' && !format[2])
-		return (-1);
-	for (p = format; *p; p++)
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (*p == '%')
+		if (format[i] == '%')
 		{
-			p++;
-			if (*p == '%')
+			i++;
+			switch (format[i])
 			{
-				count += _putchar('%');
-				continue;
+				case 'c':
+					count += print_char(va_arg(args, int));
+					break;
+				case 's':
+					count += print_str(va_arg(args, char *));
+					break;
+				case '%':
+					count += putchar('%');
+					break;
+				default:
+					count += putchar('%');
+					count += putchar(format[i]);
+					break;
 			}
-			while (get_flag(*p, &flags))
-				p++;
-			pfunc = get_print(*p);
-			count += (pfunc) ? pfunc(arguments, &flags) : _printf("%%%c", *p);
 		}
 		else
 		{
-			count += _putchar(*p);
+			count += putchar(format[i]);
 		}
 	}
 
-	_putchar(-1);
-	va_end(arguments);
+	va_end(args);
+
+	return (count);
+}
+
+/**
+ * print_char - prints a character to the standard output stream
+ * @c: character to print
+ *
+ * Return: number of characters printed
+ */
+int print_char(int c)
+{
+	return (putchar(c));
+}
+
+/**
+ * print_str - prints a string to the standard output stream
+ * @str: pointer to the string to print
+ *
+ * Return: number of characters printed
+ */
+int print_str(char *str)
+{
+	int i, count = 0;
+
+	if (str == NULL)
+		str = "(null)";
+
+	for (i = 0; str[i] != '\0'; i++)
+		count += putchar(str[i]);
 
 	return (count);
 }
