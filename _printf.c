@@ -26,23 +26,20 @@ int _printf(const char *format, ...)
 			{
 				char *s = va_arg(args, char *);
 
-				if (s == NULL)
+				s = (!s) ? "(null)" : s;
+				while (*s)
 				{
-					s = "(null)";
-				}
-				int j = 0;
-
-				while (s[j] != '\0')
-				{
-					_putchar(s[j]);
-					count++;
-					j++;
+					_putchar(*s++), count++;
 				}
 			}
 			else if (format[i] == '%')
 			{
 				_putchar('%'), count++;
 			}
+		}
+		else
+		{
+			_putchar(format[i]), count++;
 		}
 	}
 	va_end(args);
