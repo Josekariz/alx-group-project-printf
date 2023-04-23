@@ -9,7 +9,7 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int counter, j = 0;
+	int counter = 0, j = 0;
 
 	va_start(args, format);
 
@@ -19,20 +19,21 @@ int _printf(const char *format, ...)
 		if (format[j] != '%')
 		{
 			_putchar(format[j]);
+			counter++;
 		}
 		else if (format[j + 1] == 'c')
 		{
 			_putchar(va_arg(args, int));
 			j++;
+			counter++;
 		}
 		else if (format[j + 1] == 's')
 		{
 			int return_value = puts_string(va_arg(args, char*));
 
 			j++;
-			counter += (return_value - 1);
+			counter += return_value;
 		}
-		counter += 1;
 	}
 	va_end(args);
 
