@@ -1,37 +1,50 @@
 #include "main.h"
+#include <stdio.h>
+#include <stdarg.h>
 
-int my_printf(const char *format, ...)
+/**
+ * _printf - prints output according to a format
+ * @format: pointer to a format string
+ * Return: number of characters printed
+ **/
+int _printf(const char *format, ...)
 {
-unsigned int j = 0;
-int rt_value = 0;
-va_list args;
-va_start(args, format);
+	va_list args;
+	int count = 0, i = 0;
 
-for (; format[j] != '\0'; j++)
-{
+	va_start(args, format);
+	for (; format && format[i]; i++)
+	{
+		if (format[i] == '%')
+		{
+			i++;
+			if (format[i] == 'c')
+			{
+				_putchar(va_arg(args, int)), count++;
+			}
+			else if (format[i] == 's')
+			{
+				char *s = va_arg(args, char *);
 
-if (format[j] != '%')
-{
-_putchar(format[j]);
-}
-else if (format[j + 1] == 'c')
-{
-_putchar(va_arg(args, int));
-j++;
-}
-else if (format[j + 1] == 's')
-{
-int r_val = puts_string(va_arg(args, char *));
-j++;
-rt_value += (r_val - 1);
-}
-else if (format[j + 1] == '%')
-{
-_putchar('%');
-j++;
-}
-rt_value += 1;
-}
-va_end(args);
-return (rt_value);
+				if (s == NULL)
+				{
+					s = "(null)";
+				}
+				int j = 0;
+
+				while (s[j] != '\0')
+				{
+					_putchar(s[j]);
+					count++;
+					j++;
+				}
+			}
+			else if (format[i] == '%')
+			{
+				_putchar('%'), count++;
+			}
+		}
+	}
+	va_end(args);
+	return (count);
 }
