@@ -9,69 +9,32 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i, count = 0;
+	int counter, j = 0;
 
 	va_start(args, format);
 
-	for (i = 0; format[i] != '\0'; i++)
+	for (; format[j] != '\0'; j++)
 	{
-		if (format[i] == '%')
-		{
-			i++;
-			switch (format[i])
-			{
-				case 'c':
-					count += print_char(va_arg(args, int));
-					break;
-				case 's':
-					count += print_str(va_arg(args, char *));
-					break;
-				case '%':
-					count += putchar('%');
-					break;
-				default:
-					count += putchar('%');
-					count += putchar(format[i]);
-					break;
-			}
-		}
-		else
-		{
-			count += putchar(format[i]);
-		}
-	}
 
+		if (format[j] != '%')
+		{
+			_putchar(format[j]);
+		}
+		else if (format[j + 1] == 'c')
+		{
+			_putchar(va_arg(args, int));
+			j++;
+		}
+		else if (format[j + 1] == 's')
+		{
+			int return_value = puts_string(va_arg(args, char*));
+
+			j++;
+			counter += (return_value - 1);
+		}
+		counter += 1;
+	}
 	va_end(args);
 
-	return (count);
-}
-
-/**
- * print_char - prints a character to the standard output stream
- * @c: character to print
- *
- * Return: number of characters printed
- */
-int print_char(int c)
-{
-	return (putchar(c));
-}
-
-/**
- * print_str - prints a string to the standard output stream
- * @str: pointer to the string to print
- *
- * Return: number of characters printed
- */
-int print_str(char *str)
-{
-	int i, count = 0;
-
-	if (str == NULL)
-		str = "(null)";
-
-	for (i = 0; str[i] != '\0'; i++)
-		count += putchar(str[i]);
-
-	return (count);
+	return (counter);
 }
