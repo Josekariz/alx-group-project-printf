@@ -1,46 +1,54 @@
 #include "main.h"
 
-
 /**
  * _printf - prints output according to a format
- * @format: pointer to a format string
- * Return: number of characters printed
- **/
+ * @format: character string containing zero or more directives
+ *
+ * Return: the number of characters printed (excluding the null byte)
+ */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int count = 0, i = 0;
+	int i, printed_chars = 0;
+	va_list arg;
+	char buffer[1024];
 
-	va_start(args, format);
-	for (; format && format[i]; i++)
+	va_start(arg, format);
+
+	for (i = 0; format[i]; i++)
 	{
 		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] == 'c')
+			switch (format[i])
 			{
-				_putchar(va_arg(args, int)), count++;
-			}
-			else if (format[i] == 's')
-			{
-				char *s = va_arg(args, char *);
-
-				s = (!s) ? "(null)" : s;
-				while (*s)
-				{
-					_putchar(*s++), count++;
-				}
-			}
-			else if (format[i] == '%')
-			{
-				_putchar('%'), count++;
+				case 'c':
+					_putchar(va_arg(arg, int));
+					printed_chars++;
+					break;
+				case 's':
+					printed_chars += puts_s(va_arg(arg, char *));
+					break;
+				case '%':
+					_putchar('%');
+					printed_chars++;
+					break;
+				case 'd':
+				case 'i':
+					snprintf(buffer, sizeof(buffer), "%d", va_arg(arg, int));
+					printed_chars += puts(buffer);
+					break;
+				default:
+					printed_chars += print_default(format[i]);
+					break;
 			}
 		}
 		else
 		{
-			_putchar(format[i]), count++;
+			_putchar(format[i]);
+			printed_chars++;
 		}
 	}
-	va_end(args);
-	return (count);
+
+	va_end(arg);
+	return (printed_chars);
 }
