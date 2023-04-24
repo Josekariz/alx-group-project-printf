@@ -1,50 +1,49 @@
-
+#include "main.h"
 #include <stdio.h>
 #include <stdarg.h>
 
+/**
+ * _printf - prints output according to a format
+ * @format: pointer to a format string
+ * Return: number of characters printed
+ **/
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int count = 0;
+        va_list args;
+        int count = 0;
 
-    va_start(args, format);
+        va_start(args, format);
 
-    while (*format != '\0')
-    {
-        if (*format == '%')
+        for (; *format != '\0'; format++)
         {
-            format++;
-            if (*format == 'c')
-            {
-                int c = va_arg(args, int);
-                putchar(c);
-                count++;
-            }
-            else if (*format == 's')
-            {
-                char *s = va_arg(args, char *);
-                while (*s != '\0')
+                if (*format == '%')
                 {
-                    putchar(*s);
-                    s++;
-                    count++;
-                }
-            }
-            else if (*format == '%')
-            {
-                putchar('%');
-                count++;
-            }
+                        format++;
+                        if (*format == 'c')
+                        {
+                                _putchar(va_arg(args, int)), count++;
+                        }
+                        else if (*format == 's')
+                        {
+                                char *s = va_arg(args, char *);
+
+                                while (*s)
+                                {
+                                        _putchar(*s), count++;
+                                        s++;
+                                }
+                        }
+                        else if (*format == '%')
+                        {
+                                _putchar('%'), count++;
+                        }
         }
         else
         {
-            putchar(*format);
-            count++;
+            _putchar(*format); count++;
         }
         format++;
     }
-
     va_end(args);
-
     return count;
 }
