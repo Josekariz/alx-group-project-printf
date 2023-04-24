@@ -35,16 +35,17 @@ int _printf(const char *format, ...)
                         }
                         else if (*format == '%')
                         {
-				_putchar('%'), count++;
+								_putchar('%'), count++;
 						}
-		}
-		else
-		{
-			_putchar(*format); 
-			count++;
-		}
-		format++;
-	}
-	va_end(args);
-	return (count);
-}
+				}
+						else
+						{
+								_putchar(*format); 
+								count++;
+						}
+						format++;
+						}
+							va_end(args);
+							return (count);
+						}
+}						
