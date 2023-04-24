@@ -44,22 +44,12 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			printed_chars = print_char(format[i], printed_chars);
+			_putchar(format[i]);
+			printed_chars++;
 		}
 	}
 
 	va_end(arg);
 	return (printed_chars);
 }
-/**
- * print_char - prints a single characters
- * @c: the character to print
- * @printed_chars: the total number of characters printed so far
- *
- * Return: the number of characters printed
- */
-int print_char(char c, int printed_chars)
-{
-	_putchar(c);
-	return (printed_chars + 1);
-}
+
