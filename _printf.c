@@ -32,11 +32,6 @@ int _printf(const char *format, ...)
 					_putchar('%');
 					printed_chars++;
 					break;
-				case 'd':
-				case 'i':
-					snprintf(buffer, sizeof(buffer), "%d", va_arg(arg, int));
-					printed_chars += puts(buffer);
-					break;
 				default:
 					printed_chars += print_default(format[i]);
 					break;
