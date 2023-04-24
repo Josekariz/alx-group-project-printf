@@ -52,7 +52,7 @@ int _printf(const char *format, ...)
 	return (printed_chars);
 }
 /**
- * print_char - prints a single character
+ * print_char - prints a single characters
  * @c: the character to print
  * @printed_chars: the total number of characters printed so far
  *
