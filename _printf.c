@@ -1,55 +1,50 @@
-#include "main.h"
 
-/**
- * _printf - prints output according to a format
- * @format: character string containing zero or more directives
- *
- * Return: the number of characters printed (excluding the null byte)
- */
+#include <stdio.h>
+#include <stdarg.h>
+
 int _printf(const char *format, ...)
 {
-	int i, printed_chars = 0;
-	va_list arg;
-	char buffer[1024];
+    va_list args;
+    int count = 0;
 
-	va_start(arg, format);
+    va_start(args, format);
 
-	for (i = 0; format[i]; i++)
-	{
-		if (format[i] == '%')
-		{
-			i++;
-			switch (format[i])
-			{
-				case 'c':
-					_putchar(va_arg(arg, int));
-					printed_chars++;
-					break;
-				case 's':
-					printed_chars += puts_s(va_arg(arg, char *));
-					break;
-				case '%':
-					_putchar('%');
-					printed_chars++;
-					break;
-				case 'd':
-				case 'i':
-					snprintf(buffer, sizeof(buffer), "%d", va_arg(arg, int));
-					printed_chars += puts(buffer);
-					break;
-				default:
-					printed_chars += print_default(format[i]);
-					break;
-			}
-		}
-		else
-		{
-			_putchar(format[i]);
-			printed_chars++;
-		}
-	}
+    while (*format != '\0')
+    {
+        if (*format == '%')
+        {
+            format++;
+            if (*format == 'c')
+            {
+                int c = va_arg(args, int);
+                putchar(c);
+                count++;
+            }
+            else if (*format == 's')
+            {
+                char *s = va_arg(args, char *);
+                while (*s != '\0')
+                {
+                    putchar(*s);
+                    s++;
+                    count++;
+                }
+            }
+            else if (*format == '%')
+            {
+                putchar('%');
+                count++;
+            }
+        }
+        else
+        {
+            putchar(*format);
+            count++;
+        }
+        format++;
+    }
 
-	va_end(arg);
-	return (printed_chars);
+    va_end(args);
+
+    return count;
 }
-
